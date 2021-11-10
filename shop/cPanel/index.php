@@ -1,33 +1,35 @@
 <?php
 session_start();
 
-	include("cPanel/connection.php");
-	include("cPanel/function.php");
+	include("connection.php");
+	include("function.php");
 
-	$user_data = checkLogin($conn);
+	$user_data = checkAdminLogin($conn);
 
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Shop Online</title>
+	<title>Controll Panel</title>
 </head>
 <body>
-	<h1>Detta är första sidan</h1>
+	<h1>Detta är Controll Panel</h1>
 
 	<?php  
-	if (isset($_SESSION['user_id'])){ 
-		echo "Mitt konto";
+	if (isset($_SESSION['Aname'])){ 
+		echo "Users ";
+		echo " Admins ";
+		echo " Products ";
 	?>
 		
 		<a href="logout.php">Logga ut</a>
 		
 	<?php
 	 } else {
+	 	header("Location: login.php")
 	?>
 	<a href="login.php">Logga in</a>
-	<a href="signup.php">Registera</a>
 	<?php
 	 } 
 	?>
