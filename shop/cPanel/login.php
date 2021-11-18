@@ -13,15 +13,15 @@
 		}
 		else {
 		
-			$query = "SELECT * from admin WHERE Aname = '$name' limit 1";
+			$query = "SELECT * from admins WHERE Aname = '$name' limit 1";
 				
 			$result = mysqli_query($conn, $query);
 			if($result){
 				if ($result && mysqli_num_rows($result) > 0) {
 				$user_data = mysqli_fetch_assoc($result);
-					if($user_data['Apassword'] === $password){
+					if($user_data['admin_password'] === $password){
 
-						$_SESSION['Aname'] = $user_data['Aname'];
+						$_SESSION['admin_id'] = $user_data['admin_id'];
 						header("Location: index.php");
 					}
 			    }

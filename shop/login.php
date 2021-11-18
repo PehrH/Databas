@@ -3,6 +3,7 @@
 	
 	include("cPanel/connection.php");
 	include("cPanel/function.php");
+	$userInfo = userInfo($conn);
 	if ($_SERVER['REQUEST_METHOD'] == "POST")
 	{
 	
@@ -13,16 +14,19 @@
 		}
 		else {
 		
-			$query = "SELECT * from users WHERE email = '$email' limit 1";
+			$query = "SELECT * from users WHERE user_email = '$email' limit 1";
 				
 			$result = mysqli_query($conn, $query);
 			if($result){
 				if ($result && mysqli_num_rows($result) > 0) {
 				$user_data = mysqli_fetch_assoc($result);
-					if($user_data['password'] === $password){
+					if($user_data['user_password'] === $password){
 
 						$_SESSION['user_id'] = $user_data['user_id'];
 						header("Location: index.php");
+					}
+					else{
+						echo "Fel E-post eller lösenord !";
 					}
 			    }
 			}

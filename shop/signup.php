@@ -17,7 +17,7 @@
 			//echo "Du måste ange rätt epost";
 		//}
 		else {
-		$query = "INSERT into users (fName,lName,password,email) values ('$forName','$lastName','$password','$email')";
+		$query = "INSERT into users (Fname,Lname,user_password,user_email) values ('$forName','$lastName','$password','$email')";
 			
 		mysqli_query($conn, $query);
 		
@@ -35,6 +35,11 @@
 	<title>Shop Online - Registera</title>
 </head>
 <body>
+	<?php  
+	if (isset($_SESSION['user_id'])){ 
+		header("Location: index.php");
+	 } else {
+	?>
 	<div id="loginBox">
 		<form method="post">
 			<div>Registera</div><br><br>
@@ -56,5 +61,9 @@
 		</form>		
 
 	</div>
+	<?php
+	 } 
+	?>
+	
 </body>
 </html>

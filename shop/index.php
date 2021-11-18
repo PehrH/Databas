@@ -3,10 +3,8 @@ session_start();
 
 	include("cPanel/connection.php");
 	include("cPanel/function.php");
-
-	$user_data = checkLogin($conn);
-
-
+	$userInfo = userInfo($conn);
+	
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,7 +16,7 @@ session_start();
 
 	<?php  
 	if (isset($_SESSION['user_id'])){ 
-		echo "Mitt konto";
+		echo "Hej, " . $userInfo['Fname'] . "";
 	?>
 		
 		<a href="logout.php">Logga ut</a>
@@ -32,12 +30,5 @@ session_start();
 	 } 
 	?>
 	
-
-
-	<!-----
-	<a href="login.php">Logga in</a>
-	<a href="signup.php">Registera</a>
-	<a href="logout.php">Logga ut</a>
-     --->
 </body>
 </html>

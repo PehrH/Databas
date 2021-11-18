@@ -4,7 +4,7 @@ session_start();
 	include("connection.php");
 	include("function.php");
 
-	$user_data = checkAdminLogin($conn);
+	$adminInfo = adminInfo($conn);
 
 
 ?>
@@ -17,13 +17,11 @@ session_start();
 	<h1>Detta är Controll Panel</h1>
 
 	<?php  
-	if (isset($_SESSION['Aname'])){ 
-		echo "Users ";
-		echo " Admins ";
-		echo " Products ";
+	if (isset($_SESSION['admin_id'])){ 
+		echo "Hej, " . $adminInfo['Aname'] . "";
 	?>
-		
-		<a href="logout.php">Logga ut</a>
+	<br><a href="product.php">Produkter</a><br>
+	<a href="logout.php">Logga ut</a>
 		
 	<?php
 	 } else {
@@ -34,12 +32,5 @@ session_start();
 	 } 
 	?>
 	
-
-
-	<!-----
-	<a href="login.php">Logga in</a>
-	<a href="signup.php">Registera</a>
-	<a href="logout.php">Logga ut</a>
-     --->
 </body>
 </html>
