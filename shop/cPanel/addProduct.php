@@ -28,7 +28,7 @@ if (isset($_POST['addProd'])) {
 		// Execute query
 		mysqli_query($conn, $sql);
 		move_uploaded_file($tempname, $folder);
-		echo "Produkten är skapat";
+		header("Location: product.php");
 		
 }
 

@@ -6,14 +6,20 @@ session_start();
 include("connection.php");
 
 $id = $_GET['id'];
-$qry = mysqli_query($conn,"SELECT * FROM prod WHERE prod_id='$id'"); // select query
+$query = "SELECT * from prod WHERE prod_id = '$id' limit 1";
 
-$result = mysqli_fetch_array($qry); // fetch data
-echo $result['title'];
-if (isset($_POST['addProd'])) {
+$sql = mysqli_query($conn, $query); 
+$result = mysqli_fetch_assoc($sql);
 
+if (isset($_POST['update'])) {
+    if (empty($_FILES['uploadfile']['name'])) {
+        $filename = $result['prod_image'];
+    }
+    else {
     $filename = $_FILES["uploadfile"]["name"];
-    $tempname = $_FILES["uploadfile"]["tmp_name"];  
+    $tempname = $_FILES["uploadfile"]["tmp_name"]; 
+    }
+     
     $folder = "image/".$filename;
     $title = $_POST['title'];
     $price = $_POST['price'];
@@ -28,7 +34,7 @@ if (isset($_POST['addProd'])) {
 
         mysqli_query($conn, $sql);
         move_uploaded_file($tempname, $folder);
-        echo "Produkten är skapat";
+        header("Location: product.php");
         
 }
 
@@ -47,18 +53,18 @@ if (isset($_POST['addProd'])) {
     ?>
     
     
-<div id="addProduct">
+<div id="changeProduct">
         <form method="POST" action="" enctype="multipart/form-data">
-            <div>Updatera produkten</div><br><br>
+            <h1>Ändra Produkter</h1><br><br>
             <label  for="title">Titel: </label>
-            <input  type="text" name="title" value="<?php echo $result['title'] ?>"><br><br>
+            <input  type="text" name="title" value="<?php echo $result['prod_title'] ?>"><br><br>
             <label for="price">Pris: </label>
-            <input type="number" name="price" value="<?php echo $result['price'] ?>"><br><br>
+            <input type="number" name="price" value="<?php echo $result['prod_price'] ?>"><br><br>
             <label for="count">Antal:</label>
-            <input type="number" name="count" value="<?php echo $result['count'] ?>"><br><br>
+            <input type="number" name="count" value="<?php echo $result['prod_count'] ?>"><br><br>
             <label for="des">Beskrivning: </label><br>
-            <input style="width: 300px; height: 500px;" type="text" name="des" value="<?php echo $result['des'] ?>"> 
-            <?php echo'<img height="60" width="40" src="image/'.$result['prod_image'].'">'; ?>
+            <input style="width: 300px; height: 500px;" type="text" name="des" value="<?php echo $result['prod_des'] ?>"> <br><br>
+            <?php echo'<img height="60" width="40" src="image/'.$result['prod_image'].'">'; ?> <br><br>
             <input type="file" name="uploadfile" value=""/><br><br>
     
 
