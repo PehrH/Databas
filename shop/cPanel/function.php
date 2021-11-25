@@ -11,7 +11,7 @@ function userInfo($conn){
 		if ($result && mysqli_num_rows($result) > 0) {
 			$user_data = mysqli_fetch_assoc($result);
 			return $user_data;
-			# code...
+			
 		}
 	}
 }
@@ -25,13 +25,37 @@ function adminInfo($conn){
 		if ($result && mysqli_num_rows($result) > 0) {
 			$user_data = mysqli_fetch_assoc($result);
 			return $user_data;
-			# code...
+			
 		}
 	}
 }
-function deleteProduct($productId){
-	$query = "DELETE FROM prod WHERE prod_id= $productId ";
-	mysqli_query($conn,$query);
-	echo "Produkter är borttagen !";
+function shopCart($userID, $prodID, $prodTitel, $prodPrice){
+	$count = 1;
+	$query = "SELECT * from carts WHERE c_user_id = '$userID'";
+	$result = mysqli_query($conn,$query);
+	if ($result && mysqli_num_rows($result) === 0) 
+	{
+			$addToDB = "INSERT into carts (c_user_id,c_prod_titel,c_prod_id,c_prod_price,cart_count) values ('$userID','$prodTitel','$prodID','$prodPrice','$count')";
+			mysqli_query($conn, $addToDB);
+			echo "OK";
+		}
+	elseif ($result && mysqli_num_rows($result) > 0) {
+			$dbInfo = mysqli_fetch_assoc($result);
+			if ($dbInfo['c_prod_id'] === $prodID ) {
+				$count++;
+				$updateDB = "UPDATE carts SET cart_count = '$count' WHERE c_prod_id= $prodID";
+				mysqli_query($conn, $updateDB);
+				echo "OK";
+			} 
+			else{
+				$addToDB = "INSERT into carts (c_user_id,c_prod_titel,c_prod_id,c_prod_price,cart_count) values ('$userID','$prodTitel','$prodID','$prodPrice','$count')";
+				mysqli_query($conn, $addToDB);
+				echo "OK";
+			}
+
+
+
+			
+		}
 
 }

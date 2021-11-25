@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Värd: 127.0.0.1
--- Tid vid skapande: 22 nov 2021 kl 14:46
+-- Tid vid skapande: 25 nov 2021 kl 15:21
 -- Serverversion: 10.4.21-MariaDB
 -- PHP-version: 7.3.31
 
@@ -44,6 +44,70 @@ INSERT INTO `admins` (`admin_id`, `Aname`, `admin_password`, `admin_email`) VALU
 -- --------------------------------------------------------
 
 --
+-- Tabellstruktur `carts`
+--
+
+CREATE TABLE `carts` (
+  `cart_id` int(11) NOT NULL,
+  `c_user_id` int(11) NOT NULL,
+  `c_prod_titel` varchar(30) NOT NULL,
+  `c_prod_id` int(11) NOT NULL,
+  `c_prod_price` int(11) NOT NULL,
+  `cart_count` int(11) NOT NULL,
+  `c_prod_image` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumpning av Data i tabell `carts`
+--
+
+INSERT INTO `carts` (`cart_id`, `c_user_id`, `c_prod_titel`, `c_prod_id`, `c_prod_price`, `cart_count`, `c_prod_image`) VALUES
+(127, 0, 'iphone 4', 12, 1100, 3, '4.jpg'),
+(134, 0, 'iphone 6', 16, 1900, 2, '6.png'),
+(135, 0, 'iphone 4s', 13, 1350, 2, '4s.jpg'),
+(139, 0, 'iphone 6s', 17, 2100, 2, '6s.jpg'),
+(143, 0, 'iphone 5c', 15, 1600, 1, '5c.jpg'),
+(149, 2, 'iphone 4', 12, 1100, 3, '4.jpg'),
+(150, 2, 'iphone 4s', 13, 1350, 1, '4s.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur `orders`
+--
+
+CREATE TABLE `orders` (
+  `order_id` int(11) NOT NULL,
+  `order_user` int(11) NOT NULL,
+  `order_sum` int(11) NOT NULL,
+  `order_prod_count` int(11) NOT NULL,
+  `order_date` date DEFAULT NULL,
+  `order_status` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumpning av Data i tabell `orders`
+--
+
+INSERT INTO `orders` (`order_id`, `order_user`, `order_sum`, `order_prod_count`, `order_date`, `order_status`) VALUES
+(17, 2, 4650, 4, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur `ordersprod`
+--
+
+CREATE TABLE `ordersprod` (
+  `op_id` int(11) NOT NULL,
+  `o_order_id` int(11) NOT NULL,
+  `person_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellstruktur `prod`
 --
 
@@ -61,8 +125,7 @@ CREATE TABLE `prod` (
 --
 
 INSERT INTO `prod` (`prod_id`, `prod_title`, `prod_price`, `prod_count`, `prod_des`, `prod_image`) VALUES
-(11, 'Iphone 3g', 800, 5, 'The iPhone 3G is a smartphone designed and marketed by Apple Inc.; it is the second generation of iPhone, successor to the original iPhone, and was introduced on June 9, 2008, at the WWDC 2008 at the Moscone Center in San Francisco, United States.', '3g.jpg'),
-(12, 'iphone 4', 1100, 3, 'Iphone 4, i marknadsföringssyfte skrivet iPhone 4, är en smartphone med pekskärm som utvecklats av Apple. Det är den fjärde generationen Iphone, och efterföljaren till Iphone 3GS. Den är speciellt marknadsförd för videosamtal, konsumtion av media som böcker och tidningar, filmer, musik och spel, samt för allmän internet- och emailåtkomst. Telefonen tillkännagavs den 7 juni 2010 på WWDC 2010 vid Moscone Center, San Francisco,[3] och släpptes den 24 juni 2010 i USA,', '4.jpg'),
+(12, 'iphone 4', 1100, 3, 'Iphone 4, i marknadsföringssyfte skrivet iPhone 4, är en smartphone med pekskärm som utvecklats av Apple. Det är den fjärde generationen Iphone, och efterföljaren till Iphone 3GS. Den är speciellt marknadsförd för videosamtal, konsumtion av media som böcker och tidningar, filmer, musik och spel, samt för allmän internet- och emailåtkomst. Telefonen tillkännagavs den 7 juni 2010 på WWDC 2010 vid Moscone Center, San Francisco,[3] och släpptes den 24 juni 2010 i USA, ny ändring', '4.jpg'),
 (13, 'iphone 4s', 1350, 7, 'Iphone 4S, av Apple skrivet iPhone 4S, är en smarttelefon med pekskärm som utvecklats av Apple Inc. Det är en utveckling av den fjärde generationen Iphone, och efterföljaren till Iphone 4.', '4s.jpg'),
 (14, 'iphone 5', 1500, 4, 'The iPhone 5 is a smartphone that was designed and marketed by Apple Inc. It is the 6th generation iPhone, succeeding the iPhone 4S and preceding both the iPhone 5S and 5C. It was formally unveiled as part of a press event on September 12, 2012, and subsequently released on September 21, 2012.', '5.jpg'),
 (15, 'iphone 5c', 1600, 2, 'phone 5C (marknadsfört som iPhone 5c) är en smartphone med pekskärm som utvecklats av Apple. Det är den sjunde generationen Iphone och en av efterföljarna till Iphone 5.', '5c.jpg'),
@@ -96,7 +159,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `Fname`, `Lname`, `user_password`, `user_email`) VALUES
-(1, 'ameer', 'alkadhimi', '19920602', 'e3sar@hotmail.se');
+(1, 'ameer', 'alkadhimi', '19920602', 'e3sar@hotmail.se'),
+(2, 'elias', 'alkadhimi', '19920602', 'e@shop.se');
 
 --
 -- Index för dumpade tabeller
@@ -107,6 +171,24 @@ INSERT INTO `users` (`user_id`, `Fname`, `Lname`, `user_password`, `user_email`)
 --
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`admin_id`);
+
+--
+-- Index för tabell `carts`
+--
+ALTER TABLE `carts`
+  ADD PRIMARY KEY (`cart_id`);
+
+--
+-- Index för tabell `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`order_id`);
+
+--
+-- Index för tabell `ordersprod`
+--
+ALTER TABLE `ordersprod`
+  ADD PRIMARY KEY (`op_id`);
 
 --
 -- Index för tabell `prod`
@@ -131,6 +213,24 @@ ALTER TABLE `admins`
   MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT för tabell `carts`
+--
+ALTER TABLE `carts`
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
+
+--
+-- AUTO_INCREMENT för tabell `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT för tabell `ordersprod`
+--
+ALTER TABLE `ordersprod`
+  MODIFY `op_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT för tabell `prod`
 --
 ALTER TABLE `prod`
@@ -140,7 +240,7 @@ ALTER TABLE `prod`
 -- AUTO_INCREMENT för tabell `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
