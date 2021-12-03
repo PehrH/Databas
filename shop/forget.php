@@ -3,24 +3,17 @@ session_start();
 
 	include("cPanel/connection.php");
 	include("cPanel/function.php");
-	if ($_SERVER['REQUEST_METHOD'] == "POST")
-	{
-	
+	if ($_SERVER['REQUEST_METHOD'] == "POST"){
 		$email = $_POST['email'];
 		if (empty($email)) {
 			echo "Du måste ange rätt epost";
 		}
-		else {
-		
-			$query = "SELECT * from users WHERE email = '$email' limit 1";
-				
-			$result = mysqli_query($conn, $query);
+		else {	
+			$result = mysqli_query($conn, "SELECT * from users WHERE email = '$email' limit 1");
 			if($result){
 				if ($result && mysqli_num_rows($result) > 0) {
 				$user_data = mysqli_fetch_assoc($result);
-					if($user_data['email'] === $email){
-
-						
+					if($user_data['email'] === $email){	
 					}
 			    }
 			}

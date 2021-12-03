@@ -3,10 +3,14 @@ session_start();
 
 	include("connection.php");
 	include("function.php");
-
 	$adminInfo = adminInfo($conn);
-
-
+	$orderStatusCount = 0;
+	$selectOrder = mysqli_query($conn, "SELECT order_status FROM orders WHERE order_status = 0");
+	if ($selectOrder->num_rows > 0) {
+    	while ($getOrder = $selectOrder->fetch_assoc()) {
+    		$orderStatusCount ++; 
+  		}
+  	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,7 +24,9 @@ session_start();
 	if (isset($_SESSION['admin_id'])){ 
 		echo "Hej, " . $adminInfo['Aname'] . "";
 	?>
-	<br><a href="product.php">Produkter</a><br>
+	<a href="product.php"> | Produkter |</a>
+	<a href="orderstatus.php"> Order status: <?php echo $orderStatusCount ?> |</a>
+
 	<a href="logout.php">Logga ut</a>
 		
 	<?php
@@ -31,6 +37,5 @@ session_start();
 	<?php
 	 } 
 	?>
-	
 </body>
 </html>

@@ -1,11 +1,8 @@
 <?php
 error_reporting(0);
-?>
-<?php
 session_start();
 $msg = "";
 include("connection.php");
-// If upload button is clicked ...
 if (isset($_POST['addProd'])) {
 
 	$filename = $_FILES["uploadfile"]["name"];
@@ -19,19 +16,10 @@ if (isset($_POST['addProd'])) {
 		if (empty($title) || empty($price) || empty($count) || empty($des)) {
 			echo "Du måste fylla på alla information ";
 		}
-		
-	//$db = mysqli_connect("localhost", "root", "", "photos");
-
-		// Get all the submitted data from the form
-		$sql = "INSERT INTO prod (prod_title, prod_price, prod_count, prod_des, prod_image) VALUES ('$title', '$price', '$count', '$des', '$filename')";
-
-		// Execute query
-		mysqli_query($conn, $sql);
+		mysqli_query($conn,"INSERT INTO prod (prod_title, prod_price, prod_count, prod_des, prod_image) VALUES ('$title', '$price', '$count', '$des', '$filename')");
 		move_uploaded_file($tempname, $folder);
-		header("Location: product.php");
-		
+		header("Location: product.php");	
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -45,8 +33,6 @@ if (isset($_POST['addProd'])) {
 		header("Location: login.php");
 	 } else {
 	?>
-	
-	
 <div id="addProduct">
 		<form method="POST" action="" enctype="multipart/form-data">
 			<div>Lägga till produkter</div><br><br>
@@ -59,20 +45,13 @@ if (isset($_POST['addProd'])) {
 			<label for="des">Beskrivning: </label><br>
 			<textarea name="des" rows="4" cols="50"></textarea><br>
 			<input type="file" name="uploadfile" value=""/><br><br>
-	
-
 			<input type="submit" name="addProd" value="Lägga till"><br><br>
-
 			<a href="index.php">Hem</a>
-			<a href="product.php">Produkter</a>
-			
-			
+			<a href="product.php">Produkter</a>	
 		</form>		
-
 	</div>
 	<?php
 	 } 
 	?>
-
 </body>
 </html>

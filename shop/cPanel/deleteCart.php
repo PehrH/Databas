@@ -1,13 +1,9 @@
 <?php
 
 include("connection.php");
-
 $id = $_GET['id'];
-$query = "SELECT * from carts WHERE cart_id = '$id'";
-
-$sql = mysqli_query($conn, $query); 
+$sql = mysqli_query($conn, "SELECT * from carts WHERE cart_id = '$id'"); 
 $result = mysqli_fetch_assoc($sql);
-
 if ($result['cart_count'] > 1) {
     $temp = $result['cart_count'];
     $temp = $temp - 1;

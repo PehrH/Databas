@@ -6,8 +6,7 @@ session_start();
   $userInfor = userInfo($conn);
   $idUser = $userInfor ['user_id'];
   $tot = 0;
-  $getCartsInfo = "SELECT * from carts WHERE c_user_id = '$idUser'";
-  $cartConnection = mysqli_query($conn,$getCartsInfo);
+  $cartConnection = mysqli_query($conn,"SELECT * from carts WHERE c_user_id = '$idUser'");
   if(!isset($_SESSION['user_id'])) {
       header("location: login.php");
     }
@@ -23,11 +22,9 @@ session_start();
   if (isset($_SESSION['user_id'])){ 
     echo "Hej, " . $userInfor['Fname'] . "";
   ?>
-    <a href="index.php">| Hem | </a>
+    <a href="index.php">| Hem</a>
     <a href="product.php">| Produkter | </a>
     <a href="logout.php">Logga ut</a><br>
-    
-    
   <?php
    } else {
   ?>

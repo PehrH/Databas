@@ -2,10 +2,7 @@
 session_start();
 
 	include("connection.php");
-	
-	$sql = "SELECT * FROM prod";
-  $result = mysqli_query($conn,$sql);
-
+  $result = mysqli_query($conn,"SELECT * FROM prod");
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,7 +11,6 @@ session_start();
 </head>
 <body>
 	<h1>Produkter</h1>
-
 	<?php  
 	if (!isset($_SESSION['admin_id'])){ 
 		header("Location: login.php");
@@ -55,11 +51,9 @@ session_start();
 }
   ?>
 </table>
-
 	<br><a href="index.php">Hem</a><br>
 	<br><a href="addProduct.php">Lägga till produkter</a><br>
 	<a href="logout.php">Logga ut</a>
 	</form>	
-	
 </body>
 </html>

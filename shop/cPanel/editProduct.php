@@ -1,16 +1,10 @@
 <?php
 error_reporting(0);
-?>
-<?php
 session_start();
 include("connection.php");
-
 $id = $_GET['id'];
-$query = "SELECT * from prod WHERE prod_id = '$id' limit 1";
-
-$sql = mysqli_query($conn, $query); 
+$sql = mysqli_query($conn, "SELECT * from prod WHERE prod_id = '$id' limit 1"); 
 $result = mysqli_fetch_assoc($sql);
-
 if (isset($_POST['update'])) {
     if (empty($_FILES['uploadfile']['name'])) {
         $filename = $result['prod_image'];
@@ -25,19 +19,13 @@ if (isset($_POST['update'])) {
     $price = $_POST['price'];
     $count = $_POST['count'];
     $des = $_POST['des'];
-        
         if (empty($title) || empty($price) || empty($count) || empty($des)) {
             echo "Du måste fylla på alla information ";
         }
-        
-        $sql = "UPDATE prod SET prod_title = '$title', prod_price = '$price', prod_count = '$count', prod_des = '$des', prod_image = '$filename' WHERE prod_id= $id";
-
-        mysqli_query($conn, $sql);
+        mysqli_query($conn, "UPDATE prod SET prod_title = '$title', prod_price = '$price', prod_count = '$count', prod_des = '$des', prod_image = '$filename' WHERE prod_id= $id");
         move_uploaded_file($tempname, $folder);
-        header("Location: product.php");
-        
+        header("Location: product.php");      
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -51,8 +39,6 @@ if (isset($_POST['update'])) {
         header("Location: login.php");
      } else {
     ?>
-    
-    
 <div id="changeProduct">
         <form method="POST" action="" enctype="multipart/form-data">
             <h1>Ändra Produkter</h1><br><br>
@@ -66,20 +52,13 @@ if (isset($_POST['update'])) {
             <input style="width: 300px; height: 500px;" type="text" name="des" value="<?php echo $result['prod_des'] ?>"> <br><br>
             <?php echo'<img height="60" width="40" src="image/'.$result['prod_image'].'">'; ?> <br><br>
             <input type="file" name="uploadfile" value=""/><br><br>
-    
-
             <input type="submit" name="update" value="Lägga till"><br><br>
-
             <a href="index.php">Hem</a>
-            <a href="product.php">Produkter</a>
-            
-            
+            <a href="product.php">Produkter</a>   
         </form>     
-
     </div>
     <?php
      } 
     ?>
-
 </body>
 </html>
