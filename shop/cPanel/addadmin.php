@@ -4,9 +4,24 @@ session_start();
 	include("connection.php");
 	include("function.php");
 	$adminInfo = adminInfo($conn);
+	$idAdmin = $adminInfo ['admin_id'];
 	$orderStatusCount = getOrderStatusCount($conn);
 	$newMessageCount = getNewMessageCountAdmin($conn);
 	$getSiteSetting = getSiteSetting($conn);
+	if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addAdmin']) ){
+			$aName = $_POST['addUserName'];
+			$aEmail = $_POST['addEmail'];
+			$aPassword = $_POST['addPassword'];
+			if (empty($aName) || empty($aEmail) || empty($aPassword)){
+			echo "Du måste fylla på alla information ";
+		}
+		else{
+			mysqli_query($conn, "INSERT INTO admins (Aname,admin_email,admin_password) values ('$aName','$aEmail','$aPassword') ");
+      		header("location: admins.php");
+      		
+		}
+	}
+	
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,7 +32,6 @@ session_start();
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<h1>Detta är Controll Panel</h1>
 
 	<?php  
 	if (isset($_SESSION['admin_id'])){ 
@@ -36,11 +50,19 @@ session_start();
     </ul>    
 	<?php
 	 } else {
-	 	header("Location: login.php")
-	?>
-	<a href="login.php">Logga in</a>
-	<?php
+	 	header("Location: login.php");
 	 } 
 	?>
+	<h3>Lägga till ny admin</h3>
+	<br><br>
+	<form method="post">
+	<label>Username: </label>
+	<input type="text" name="addUserName" value=""><br><br>
+	<label>E-post: </label>
+	<input type="text" name="addEmail" value=""><br><br>
+	<label>Lösenord: </label>
+	<input type="password" name="addPassword" value=""><br><br>
+	<input type="submit" name="addAdmin" value="Lägga till"><br><br>
+	</form>
 </body>
 </html>

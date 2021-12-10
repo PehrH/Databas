@@ -4,6 +4,8 @@ session_start();
   include("cPanel/function.php");
   $userInfo = userInfo($conn);
   $getCartsCount = getCartsCount($conn);
+  $newMessagesCount = getNewMessageCountAdmin($conn);
+  $getSiteSetting = getSiteSetting($conn);
   $result = mysqli_query($conn,"SELECT * FROM prod");
   $userID = $userInfo['user_id'];
   if (isset($_GET["id"])) {
@@ -15,25 +17,35 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Shop Online - Produkter</title>
+  <title><?php echo $getSiteSetting['site_name'] ?> - Produkter</title>
+  <meta name="description" content="<?php echo $getSiteSetting['site_desc'] ?>">
+  <meta name="keywords" content="<?php echo $getSiteSetting['site_meta'] ?>">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Produkter</h1>
   <?php  
   if (isset($_SESSION['user_id'])){ 
-    echo "Hej, " . $userInfo['Fname'] . "";
   ?>
-    <a href="index.php">| Hem  </a>
-    <a href="history.php">| Historik | </a>
-    <a href="logout.php">Logga ut</a><br>
-    <a href="cart.php">Varukorgen: <?php  echo $getCartsCount['total_count']; ?> </a><br> 
+  <ul>
+  <li><a href="index.php">Hem</a></li>
+  <li><a href="history.php">Historik</a></li>
+  <li><a href="sendmessages.php">Kontakta admin</a></li>
+  <li><a href="messages.php">Meddelandet: <?php  echo $newMessagesCount?></a></li>
+  < <li style="float: right;"><a href="logout.php">Logga ut</a></li>
+  <li style="float: right; background-color: #04AA6D"><a href="cart.php">Varukorgen: <?php  echo $getCartsCount?></a></li>
+  <li style="float: right; background-color: #04AA6D"><a href=""><?php  echo $userInfo['Fname']?></a></li>
+  </ul>
+  </ul> 
   <?php
    } else {
   ?>
-  <a href="index.php">Hem</a>
-  <a href="login.php">Logga in</a>
-  <a href="signup.php">Registera</a>
-  <a href="product.php">Produkter</a>
+  <ul>
+    <li><a href="index.php">Hem</a></li>
+  <li><a href="product.php">Produkter</a></li>
+  <li><a href="login.php">Logga in</a></li>
+  <li><a href="signup.php">Registera</a></li>
+  </ul>
   <?php
    } 
   ?>

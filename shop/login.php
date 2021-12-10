@@ -3,6 +3,8 @@
 	include("cPanel/connection.php");
 	include("cPanel/function.php");
 	$userInfo = userInfo($conn);
+	$getSiteSetting = getSiteSetting($conn);
+
 	if ($_SERVER['REQUEST_METHOD'] == "POST"){
 		$email = $_POST['email'];
 		$password = $_POST['password'];
@@ -30,9 +32,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Shop Online - Logga in</title>
+	<title><?php echo $getSiteSetting['site_name'] ?></title>
+  <meta name="description" content="<?php echo $getSiteSetting['site_desc'] ?>">
+  <meta name="keywords" content="<?php echo $getSiteSetting['site_meta'] ?>">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <ul>
+  <li><a href="index.php">Hem</a></li>
+  <li><a href="product.php">Produkter</a></li>
+  <li><a href="signup.php">Registera</a></li>
+  </ul>
 	<div id="loginBox">
 		<form method="post">
 			<div>Logga in</div><br>
@@ -41,6 +51,7 @@
 			<label for="password">Lösenord: </label>
 			<input type="password" name="password" minlength="6"><br><br>
 			<input type="submit" value="Logga in"><br><br>
+			<a href="forgetpass.php">Glömt lösenord</a>
 			<div>Har du ingen konto ? </div><a href="signup.php">Registera här</a>
 		</form>		
 

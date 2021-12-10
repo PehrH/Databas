@@ -6,30 +6,43 @@ session_start();
 	$result = mysqli_query($conn,"SELECT * FROM prod");
 	$userID = $userInfo['user_id'];
 	$getCartsCount = getCartsCount($conn);	
+  $newMessagesCount = getNewMessageCountAdmin($conn);
+  $getSiteSetting = getSiteSetting($conn);
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Shop Online</title>
+	<title><?php echo $getSiteSetting['site_name'] ?></title>
+  <meta name="description" content="<?php echo $getSiteSetting['site_desc'] ?>">
+  <meta name="keywords" content="<?php echo $getSiteSetting['site_meta'] ?>">
+  
 </head>
 <body>
 	<h1>Hem</h1>
   <?php  
   if (isset($_SESSION['user_id'])){ 
-    echo "Hej, " . $userInfo['Fname'] . "";
   ?>
-    <a href="product.php">| Produkter</a>
-    <a href="history.php">| Historik | </a>
-    <a href="logout.php">Logga ut</a><br>
-    <a href="cart.php">Varukorgen: <?php  echo $getCartsCount['total_count']?> </a><br>
+  <ul>
+  <li><a href="index.php">Hem</a></li>
+  <li><a href="product.php">Produkter</a></li>
+  <li><a href="history.php">Historik</a></li>
+  <li><a href="sendmessages.php">Kontakta admin</a></li>
+  <li><a href="messages.php">Meddelandet: <?php  echo $newMessagesCount?></a></li>
+   <li style="float: right;"><a href="logout.php">Logga ut</a></li>
+  <li style="float: right; background-color: #04AA6D"><a href="cart.php">Varukorgen: <?php  echo $getCartsCount?></a></li>
+  <li style="float: right; background-color: #04AA6D"><a href=""><?php  echo $userInfo['Fname']?></a></li>
+  </ul>
+  </ul>
     
   <?php
    } else {
   ?>
-  <a href="index.php">Hem</a>
-  <a href="login.php">Logga in</a>
-  <a href="signup.php">Registera</a>
-  <a href="product.php">Produkter</a>
+  <ul>
+    <li><a href="index.php">Hem</a></li>
+  <li><a href="product.php">Produkter</a></li>
+  <li><a href="login.php">Logga in</a></li>
+  <li><a href="signup.php">Registera</a></li>
+  </ul>
   <?php
    } 
   ?>
@@ -37,11 +50,11 @@ session_start();
   <?php
 
   if ($result->num_rows > 0) {
-  	for ($i=0; $i < 6 ; $i++) { 
+  	for ($i=0; $i < $getSiteSetting['prod_nr']; $i++) { 
   		$row = $result->fetch_assoc();
   ?>
 
-  <div>
+  <div class="prodBox">
   <form method="post">
   <a href="prodview.php?id=<?php echo $row["prod_id"];?>"><img src="cPanel/image/<?php echo $row["prod_image"];?>" style="width:80px;height:100px;"></a>
   <h3><a href="prodview.php?id=<?php echo $row["prod_id"];?>"><?php echo $row["prod_title"];?></a></h3>

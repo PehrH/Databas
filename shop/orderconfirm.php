@@ -6,35 +6,50 @@ session_start();
   
 
   $userInfor = userInfo($conn);
+  $newMessagesCount = getNewMessageCountAdmin($conn);
+  $getSiteSetting = getSiteSetting($conn);
   $idUser = $userInfor ['user_id'];
-  $getLastRow = mysqli_query($conn, "SELECT order_id AS last_row FROM orders WHERE order_user = $idUser ORDER BY order_id DESC LIMIT 1");
-  $lastRow = mysqli_fetch_assoc($getLastRow);
-  $lastOrder = $lastRow['last_row'];
-  $orderConnection = mysqli_query($conn,"SELECT * FROM ordersprod JOIN orders ON orders.order_id = ordersprod.o_order_id WHERE ordersprod.o_order_id = $lastOrder");
-  if(!isset($_SESSION['user_id'])) {
+  if($idUser < 1) {
       header("location: login.php");
     }
-  else{
-    
-  }
+  mysqli_begin_transaction($conn);
+  try{
+      $getLastRow = mysqli_query($conn, "SELECT order_id AS last_row FROM orders WHERE order_user = $idUser ORDER BY order_id DESC LIMIT 1");
+      $lastRow = mysqli_fetch_assoc($getLastRow);
+      $lastOrder = $lastRow['last_row'];
+      $orderConnection = mysqli_query($conn,"SELECT * FROM ordersprod JOIN orders ON orders.order_id = ordersprod.o_order_id WHERE ordersprod.o_order_id = $lastOrder");
+      mysqli_commit($conn);
+      } catch (mysqli_sql_exception $exception) {
+          mysqli_rollback($conn);
+           throw $exception;
+        }
   
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Shop Online</title>
+  <title><?php echo $getSiteSetting['site_name'] ?></title>
+  <meta name="description" content="<?php echo $getSiteSetting['site_desc'] ?>">
+  <meta name="keywords" content="<?php echo $getSiteSetting['site_meta'] ?>">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <?php  
   if (!isset($_SESSION['user_id'])){ 
     header("location: login.php");
    } else {
-    echo "Hej, " . $userInfor['Fname'] . "";
   ?>
-  <a href="index.php">| Hem  </a>
-    <a href="product.php">| Produkter</a>
-    <a href="history.php">| Historik | </a>
-    <a href="logout.php">Logga ut</a><br>
+  <ul>
+  <li><a href="index.php">Hem</a></li>
+  <li><a href="product.php">Produkter</a></li>
+  <li><a href="history.php">Historik</a></li>
+  <li><a href="sendmessages.php">Kontakta admin</a></li>
+  <li><a href="messages.php">Meddelandet: <?php  echo $newMessagesCount?></a></li>
+   <li style="float: right;"><a href="logout.php">Logga ut</a></li>
+  <li style="float: right; background-color: #04AA6D"><a href="cart.php">Varukorgen: <?php  echo $getCartsCount?></a></li>
+  <li style="float: right; background-color: #04AA6D"><a href=""><?php  echo $userInfo['Fname']?></a></li>
+  </ul>
+  </ul> 
   <?php
    } 
    ?>

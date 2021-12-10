@@ -3,9 +3,14 @@
 include("connection.php");
 
 $id = $_GET['id']; 
-
-$del = mysqli_query($conn,"DELETE FROM prod WHERE prod_id = '$id'"); 
-
+mysqli_begin_transaction($conn);
+try{
+	$del = mysqli_query($conn,"DELETE FROM prod WHERE prod_id = '$id'"); 
+	mysqli_commit($conn);
+} catch (mysqli_sql_exception $exception) {
+          mysqli_rollback($conn);
+           throw $exception;
+        }
 if($del)
 {
     mysqli_close($conn); 

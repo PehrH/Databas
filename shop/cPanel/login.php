@@ -3,6 +3,7 @@
 	
 	include("connection.php");
 	include("function.php");
+	$getSiteSetting = getSiteSetting($conn);
 	if ($_SERVER['REQUEST_METHOD'] == "POST")
 	{
 		$name = $_POST['name'];
@@ -28,7 +29,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Controll Panel - Logga in</title>
+  <title><?php echo $getSiteSetting['site_name'] ?> - Kontrollpanalen</title>
+  <meta name="description" content="<?php echo $getSiteSetting['site_desc'] ?>">
+  <meta name="keywords" content="<?php echo $getSiteSetting['site_meta'] ?>">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 	<div id="loginBox">
@@ -40,6 +44,7 @@
 			<label for="password">Lösenord: </label>
 			<input type="password" name="password" minlength="5"><br><br>
 			<input type="submit" value="Logga in"><br><br>
+			<a href="forgetpass.php">Glömt lösenord</a>
 		</form>		
 
 	</div>

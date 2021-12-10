@@ -5,6 +5,8 @@ session_start();
   include("cPanel/function.php");
   $userInfo = userInfo($conn);
   $getCartsCount = getCartsCount($conn);
+  $newMessagesCount = getNewMessageCountAdmin($conn);
+  $getSiteSetting = getSiteSetting($conn);
   $userID = $userInfo['user_id'];
   $selectOrder = mysqli_query($conn, "SELECT * from orders WHERE order_user = '$userID'");
   if ($_SERVER['REQUEST_METHOD'] == "POST"){
@@ -18,7 +20,10 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Shop Online</title>
+  <title><?php echo $getSiteSetting['site_name'] ?> - Historik</title>
+  <meta name="description" content="<?php echo $getSiteSetting['site_desc'] ?>">
+  <meta name="keywords" content="<?php echo $getSiteSetting['site_meta'] ?>">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Historik</h1>
@@ -26,12 +31,17 @@ session_start();
   if (!isset($_SESSION['user_id'])){ 
     header("location: login.php");
    } else {
-    echo "Hej, " . $userInfo['Fname'] . "";
   ?>
-<a href="index.php">| Hem  </a>
-    <a href="product.php">| Produkter |</a>
-    <a href="logout.php">Logga ut</a><br>
-    <a href="cart.php">Varukorgen: <?php  echo $getCartsCount['total_count']; ?> </a><br> 
+<ul>
+  <li><a href="index.php">Hem</a></li>
+  <li><a href="product.php">Produkter</a></li>
+  <li><a href="sendmessages.php">Kontakta admin</a></li>
+  <li><a href="messages.php">Meddelandet: <?php  echo $newMessagesCount?></a></li>
+   <li style="float: right;"><a href="logout.php">Logga ut</a></li>
+  <li style="float: right; background-color: #04AA6D"><a href="cart.php">Varukorgen: <?php  echo $getCartsCount?></a></li>
+  <li style="float: right; background-color: #04AA6D"><a href=""><?php  echo $userInfo['Fname']?></a></li>
+  </ul>
+  </ul> 
   <?php
    } 
    ?>

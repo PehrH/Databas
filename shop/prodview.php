@@ -4,6 +4,8 @@ session_start();
   include("cPanel/connection.php");
   include("cPanel/function.php");
   $userInfo = userInfo($conn);
+  $newMessagesCount = getNewMessageCountAdmin($conn);
+  $getSiteSetting = getSiteSetting($conn);
   $userID = $userInfo['user_id'];
   $userFname = $userInfo['Fname'];
   $userLname = $userInfo['Lname'];
@@ -19,7 +21,15 @@ session_start();
     }
     else{
       $star = $_POST['star'];
-    mysqli_query($conn, "INSERT into comments (comment_prod,comment_user_id,comment_user_Fname,comment_user_Lname,comment_rating,comment_text ) values ('$id','$userID','$userFname','$userLname','$star','$commentText')");
+      mysqli_begin_transaction($conn);
+      try{
+        mysqli_query($conn, "INSERT into comments (comment_prod,comment_user_id,comment_user_Fname,comment_user_Lname,comment_rating,comment_text ) values ('$id','$userID','$userFname','$userLname','$star','$commentText')");
+        mysqli_commit($conn);
+      } catch (mysqli_sql_exception $exception) {
+          mysqli_rollback($conn);
+           throw $exception;
+        }
+    
     header("location: prodview.php?id=$id");
   }
     }
@@ -28,27 +38,35 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Shop Online</title>
-   <link rel="stylesheet" type="text/css" href="style.css">
+  <title><?php echo $getSiteSetting['site_name'] . ' ' . $prodInfo['prod_title'] ;?></title>
+  <meta name="description" content="<?php echo $getSiteSetting['site_desc'] ?>">
+  <meta name="keywords" content="<?php echo $getSiteSetting['site_meta'] ?>">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <?php  
   if (!isset($_SESSION['user_id'])){ 
     
   ?> 
-  <a href="index.php">Hem</a>
-  <a href="login.php">Logga in</a>
-  <a href="signup.php">Registera</a>
-  <a href="product.php">Produkter</a>
+  <ul>
+  <li><a href="index.php">Hem</a></li>
+  <li><a href="product.php">Produkter</a></li>
+  <li><a href="login.php">Logga in</a></li>
+  <li><a href="signup.php">Registera</a></li>
+  </ul>
   <?php
    } else {
-    echo "Hej, " . $userInfo['Fname'] . "";
   ?>
-<a href="index.php">| Hem  </a>
-    <a href="product.php">| Produkter</a>
-    <a href="history.php">| Historik | </a>
-    <a href="logout.php">Logga ut</a><br>
-    <a href="cart.php">Varukorgen: <?php  echo $getCartsCount['total_count']; ?> </a><br> 
+<ul>
+  <li><a href="index.php">Hem</a></li>
+  <li><a href="product.php">Produkter</a></li>
+  <li><a href="history.php">Historik</a></li>
+  <li><a href="sendmessages.php">Kontakta admin</a></li>
+  <li><a href="messages.php">Meddelandet: <?php  echo $newMessagesCount?></a></li>
+  <li style="float: right;"><a href="logout.php">Logga ut</a></li>
+  <li style="float: right; background-color: #04AA6D"><a href="cart.php">Varukorgen: <?php  echo $getCartsCount?></a></li>
+  <li style="float: right; background-color: #04AA6D"><a href=""><?php  echo $userInfo['Fname']?></a></li>
+  </ul>
   <?php
    } 
    ?>
